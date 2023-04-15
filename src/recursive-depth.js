@@ -13,10 +13,31 @@ const { NotImplementedError } = require('../extensions/index.js');
  *
  */
 class DepthCalculator {
-  calculateDepth(/* arr */) {
-    throw new NotImplementedError('Not implemented');
-    // remove line with error and write your code here
+  calculateDepth(array,depth=0) {
+    if (array.flat(depth).every(e=>!Array.isArray(e))){
+      return ++depth
+    }
+    depth++
+    return this.calculateDepth(array,depth)
+    //return array.flat(depth).every(e=>!Array.isArray(e))?depth:this.calculateDepth(array,depth)
+    // Stack way solution doesnt pass recursive test =)
+    /*
+    const bracketsArr=JSON.stringify(arr).replace(/[^\[\]]/g,'').split('')
+    let stack = []
+    let maxDepth=0
+    for (let cell of bracketsArr){
+      if (cell==='['){
+        stack.push(cell)
+      }
+      if (cell===']'){
+        stack.pop()
+      }
+    maxDepth=Math.max(stack.length,maxDepth)
+    }
+    return maxDepth
+      */
   }
+
 }
 
 module.exports = {
