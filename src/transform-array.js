@@ -13,11 +13,44 @@ const { NotImplementedError } = require('../extensions/index.js');
  * transform([1, 2, 3, '--discard-prev', 4, 5]) => [1, 2, 4, 5]
  * 
  */
-function transform(/* arr */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
-}
+function transform(arr) {
+  if (!(arr instanceof Array)){
+    throw new Error('\'arr\' parameter must be an instance of the Array!')
+  }
+  let resultArr = arr.map(e=>e={value:e,modify:'',service:false})
+  resultArr.forEach((e,i)=>{
+    
+      if (resultArr[i].value==='--discard-next'){
+        if (typeof resultArr[i+1]==='object'){
+          resultArr[i+1].modify+='discard'
+        }
+        resultArr[i].service=true
+      }
+      if (resultArr[i].value==='--discard-prev'){
+        if (typeof resultArr[i-1]==='object'){
+          resultArr[i-1].modify+='discard'
+        }
+        resultArr[i].service=true
+      }
+      if (resultArr[i].value==='--double-prev'){
+        if (typeof resultArr[i-1]==='object'){
+          resultArr[i-1].modify+='double'
+        }
+        resultArr[i].service=true
+      }
+      if (resultArr[i].value==='--double-next'){
+        if (typeof resultArr[i+1]==='object'){
+          resultArr[i+1].modify+='double'
+        }
+        resultArr[i].service=true
+      }})
+      resultArr= resultArr
+      .filter(e=>!e.service&&e.modify!=='discard'&&e.modify!=='discarddouble'&&e.modify!=='discarddiscard')
+      .map(e=>e=(e.modify===''||e.modify==='doublediscard')?[e.value]:e.modify==='double'?[e.value,e.value]:[e.value,e.value,e.value]).flat(1)
+    
 
+  return  resultArr
+    }
 module.exports = {
   transform
 };
